@@ -1,0 +1,275 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <title>User Management</title>-->
+<!--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">-->
+<!--</head>-->
+<!--<body class="p-4">-->
+
+<!--<div class="container">-->
+<!--    <h2 class="mb-4">User Management</h2>-->
+
+<!--    &lt;!&ndash; Form &ndash;&gt;-->
+<!--    <form th:action="@{/view/user/save}" method="post" th:object="${user}" class="border p-4 mb-4 rounded bg-light">-->
+<!--        <input type="hidden" th:field="*{id}"/>-->
+<!--        <div class="mb-3">-->
+<!--            <label>Name</label>-->
+<!--            <input type="text" class="form-control" th:field="*{name}" required>-->
+<!--        </div>-->
+<!--        <div class="mb-3">-->
+<!--            <label>Age</label>-->
+<!--            <input type="number" class="form-control" th:field="*{age}" required>-->
+<!--        </div>-->
+<!--        <div class="mb-3">-->
+<!--            <label>Height (cm)</label>-->
+<!--            <input type="number" step="0.01" class="form-control" th:field="*{height}" required>-->
+<!--        </div>-->
+<!--        <div class="mb-3">-->
+<!--            <label>Weight (kg)</label>-->
+<!--            <input type="number" step="0.01" class="form-control" th:field="*{weight}" required>-->
+<!--        </div>-->
+<!--        <div class="mb-3">-->
+<!--            <label>Goal</label>-->
+<!--            <select class="form-select" th:field="*{goal}" required>-->
+<!--                <option value="" disabled selected>Select Goal</option>-->
+<!--                <option value="LOSS_WEIGHT">LOSS_WEIGHT</option>-->
+<!--                <option value="GAIN_WEIGHT">GAIN_WEIGHT</option>-->
+<!--                <option value="MAINTAIN_WEIGHT">MAINTAIN_WEIGHT</option>-->
+<!--            </select>-->
+<!--        </div>-->
+<!--        <button type="submit" class="btn btn-primary">Save</button>-->
+<!--        <a th:href="@{/view/user}" class="btn btn-secondary">Reset</a>-->
+<!--    </form>-->
+
+<!--    &lt;!&ndash; Table &ndash;&gt;-->
+<!--    <h4>User List</h4>-->
+<!--    <table class="table table-bordered table-striped mt-3">-->
+<!--        <thead class="table-dark">-->
+<!--        <tr>-->
+<!--            <th>ID</th>-->
+<!--            <th>Name</th>-->
+<!--            <th>Age</th>-->
+<!--            <th>Height</th>-->
+<!--            <th>Weight</th>-->
+<!--            <th>Goal</th>-->
+<!--            <th>Actions</th>-->
+<!--        </tr>-->
+<!--        </thead>-->
+<!--        <tbody>-->
+<!--        <tr th:each="u : ${users}">-->
+<!--            <td th:text="${u.id}"></td>-->
+<!--            <td th:text="${u.name}"></td>-->
+<!--            <td th:text="${u.age}"></td>-->
+<!--            <td th:text="${u.height}"></td>-->
+<!--            <td th:text="${u.weight}"></td>-->
+<!--            <td th:text="${u.goal}"></td>-->
+<!--            <td>-->
+<!--                <a th:href="@{/view/user/edit/{id}(id=${u.id})}" class="btn btn-sm btn-info">Load</a>-->
+<!--                <a th:href="@{/view/user/delete/{id}(id=${u.id})}" class="btn btn-sm btn-danger"-->
+<!--                   onclick="return confirm('Are you sure you want to delete this user?')">Delete</a>-->
+<!--            </td>-->
+<!--        </tr>-->
+<!--        </tbody>-->
+<!--    </table>-->
+<!--</div>-->
+
+<!--</body>-->
+<!--</html>-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User Management</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #A8E6CF, #FFCCBC); /* Soft gradient from pastel green to blush pink */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #2d6a4f; /* Dark Green for text */
+        }
+
+        .container {
+            max-width: 900px;
+            margin-top: 50px;
+        }
+
+        .h2, .h4 {
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .form-control, .form-select {
+            border-radius: 25px;
+            border: 1px solid #2d6a4f;
+            padding: 15px;
+            font-size: 1rem;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #8d99ae;
+            box-shadow: 0 0 10px rgba(181, 118, 118, 0.6); /* Blush pink focus glow */
+        }
+
+        .btn-primary {
+            background-color: #2d6a4f;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 50px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #1e4f33;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: #f1b6b6;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 50px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background-color: #e29595;
+            transform: translateY(-2px);
+        }
+
+        .form-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+        }
+
+        .table {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .table-dark {
+            background-color: #2d6a4f;
+            color: white;
+            font-weight: bold;
+        }
+
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: #f1b6b6;
+        }
+
+        .table-striped tbody tr:nth-of-type(even) {
+            background-color: #ffffff;
+        }
+
+        .table-bordered td, .table-bordered th {
+            border-color: #8d99ae;
+        }
+
+        .table a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .table a:hover {
+            color: #f1b6b6;
+        }
+
+        .btn-sm {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.875rem;
+            border-radius: 15px;
+        }
+
+        .form-container .mb-3 {
+            margin-bottom: 20px;
+        }
+
+        .form-container h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #2d6a4f;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="p-4">
+
+<div class="container">
+    <h2>User Management</h2>
+
+    <!-- Form -->
+    <div class="form-container">
+        <h3>Add or Edit User</h3>
+        <form th:action="@{/view/user/save}" method="post" th:object="${user}">
+            <input type="hidden" th:field="*{id}"/>
+            <div class="mb-3">
+                <label>Name</label>
+                <input type="text" class="form-control" th:field="*{name}" required>
+            </div>
+            <div class="mb-3">
+                <label>Age</label>
+                <input type="number" class="form-control" th:field="*{age}" required>
+            </div>
+            <div class="mb-3">
+                <label>Height (cm)</label>
+                <input type="number" step="0.01" class="form-control" th:field="*{height}" required>
+            </div>
+            <div class="mb-3">
+                <label>Weight (kg)</label>
+                <input type="number" step="0.01" class="form-control" th:field="*{weight}" required>
+            </div>
+            <div class="mb-3">
+                <label>Goal</label>
+                <select class="form-select" th:field="*{goal}" required>
+                    <option value="" disabled selected>Select Goal</option>
+                    <option value="LOSS_WEIGHT">LOSS_WEIGHT</option>
+                    <option value="GAIN_WEIGHT">GAIN_WEIGHT</option>
+                    <option value="MAINTAIN_WEIGHT">MAINTAIN_WEIGHT</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a th:href="@{/view/user}" class="btn btn-secondary">Reset</a>
+        </form>
+    </div>
+
+    <!-- Table -->
+    <h4>User List</h4>
+    <table class="table table-bordered table-striped mt-3">
+        <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Height</th>
+            <th>Weight</th>
+            <th>Goal</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="u : ${users}">
+            <td th:text="${u.id}"></td>
+            <td th:text="${u.name}"></td>
+            <td th:text="${u.age}"></td>
+            <td th:text="${u.height}"></td>
+            <td th:text="${u.weight}"></td>
+            <td th:text="${u.goal}"></td>
+            <td>
+                <a th:href="@{/view/user/edit/{id}(id=${u.id})}" class="btn btn-sm btn-info">Load</a>
+                <a th:href="@{/view/user/delete/{id}(id=${u.id})}" class="btn btn-sm btn-danger"
+                   onclick="return confirm('Are you sure you want to delete this user?')">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

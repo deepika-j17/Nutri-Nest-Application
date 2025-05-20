@@ -1,0 +1,231 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--  <title>Diet Plans</title>-->
+<!--  <style>-->
+<!--    body { font-family: Arial, sans-serif; padding: 20px; }-->
+<!--    table, th, td { border: 1px solid gray; border-collapse: collapse; padding: 8px; text-align: center; }-->
+<!--    th { background-color: #e2f3e4; }-->
+<!--    .form-group { margin-bottom: 10px; }-->
+<!--  </style>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<h2>Diet Plans</h2>-->
+
+<!--<table>-->
+<!--  <tr>-->
+<!--    <th>ID</th>-->
+<!--    <th>Name</th>-->
+<!--    <th>Description</th>-->
+<!--    <th>Calories</th>-->
+<!--    <th>Actions</th>-->
+<!--  </tr>-->
+<!--  <tr th:each="plan : ${dietPlans}">-->
+<!--    <td th:text="${plan.id}"></td>-->
+<!--    <td th:text="${plan.planName}"></td>-->
+<!--    <td th:text="${plan.description}"></td>-->
+<!--    <td th:text="${plan.totalCalories}"></td>-->
+<!--    <td>-->
+<!--      <a th:href="@{'/view/dietplans/edit/' + ${plan.id}}">Edit</a> |-->
+<!--      <a th:href="@{'/view/dietplans/delete/' + ${plan.id}}" onclick="return confirm('Are you sure?')">Delete</a>-->
+<!--    </td>-->
+<!--  </tr>-->
+<!--</table>-->
+
+<!--<h3 th:text="${editing} ? 'Edit Diet Plan' : 'Add New Diet Plan'"></h3>-->
+<!--<form th:action="@{${editing} + ${newDietPlan.id} : '/view/dietplans/add'}" method="post">-->
+<!--  <div class="form-group">-->
+<!--    <label>Plan Name:</label>-->
+<!--    <input type="text" name="planName" th:value="${newDietPlan.planName}" required>-->
+<!--  </div>-->
+<!--  <div class="form-group">-->
+<!--    <label>Description:</label>-->
+<!--    <input type="text" name="description" th:value="${newDietPlan.description}" required>-->
+<!--  </div>-->
+<!--  <div class="form-group">-->
+<!--    <label>Total Calories:</label>-->
+<!--    <input type="number" step="0.01" name="totalCalories" th:value="${newDietPlan.totalCalories}" required>-->
+<!--  </div>-->
+<!--  <button type="submit" th:text="${editing} ? 'Update' : 'Add'"></button>-->
+<!--</form>-->
+
+<!--</body>-->
+<!--</html>-->
+<!-- src/main/resources/templates/dietplan.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Diet Plans</title>
+  <style>
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background-color: #fdf6f0;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0, 128, 96, 0.1);
+    }
+
+    h1, h2 {
+      color: #347d53;
+      text-align: center;
+    }
+
+    .form-section,
+    .table-section {
+      margin-bottom: 30px;
+    }
+
+    form.diet-form {
+      display: grid;
+      gap: 12px;
+      padding: 16px;
+      background-color: #f9f0f4;
+      border: 1px solid #e6cfcf;
+      border-radius: 12px;
+    }
+
+    form.diet-form label {
+      font-weight: 600;
+      color: #3c5946;
+    }
+
+    form.diet-form input,
+    form.diet-form select {
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid #cccccc;
+      font-size: 1rem;
+    }
+
+    form.diet-form button {
+      background-color: #78c2ad;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.3s;
+    }
+
+    form.diet-form button:hover {
+      background-color: #5aa694;
+    }
+
+    .table-section table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background-color: #fafafa;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .table-section th,
+    .table-section td {
+      padding: 12px;
+      text-align: center;
+      border-bottom: 1px solid #eaeaea;
+    }
+
+    .table-section th {
+      background-color: #cfeae1;
+      color: #2c5f50;
+    }
+
+    .table-section tr:nth-child(even) {
+      background-color: #f3f9f7;
+    }
+
+    .table-section a {
+      color: #b86e7b;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .table-section a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Diet Plans</h1>
+
+  <!-- Create New Diet Plan Form -->
+  <section class="form-section">
+    <h2>Create / Update Diet Plan</h2>
+    <form th:action="@{/users/dietplans/save}" th:object="${dietPlan}" method="post" class="diet-form">
+      <input type="hidden" th:field="*{id}"/>
+
+      <label>Diet Date:</label>
+      <input type="date" th:field="*{dietDate}" required/>
+
+      <label>Meal Type:</label>
+      <select th:field="*{mealType}" required>
+        <option value="">-- Select --</option>
+        <option th:each="type : ${mealTypes}" th:value="${type}" th:text="${type}"></option>
+      </select>
+
+      <label>User ID:</label>
+      <input type="number" th:field="*{userId}" required/>
+
+      <label>Food Item IDs (comma-separated):</label>
+      <input type="text" name="foodItemIdsStr" placeholder="e.g. 1,2,3" required/>
+
+      <button type="submit">Save</button>
+    </form>
+  </section>
+
+  <!-- Diet Plan List -->
+  <section class="table-section">
+    <h2>All Diet Plans</h2>
+    <table>
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Date</th>
+        <th>Meal Type</th>
+        <th>User ID</th>
+        <th>Food Item IDs</th>
+        <th>Calories</th>
+        <th>Protein</th>
+        <th>Fat</th>
+        <th>Fiber</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="plan : ${dietPlans}">
+        <td th:text="${plan.id}"></td>
+        <td th:text="${plan.dietDate}"></td>
+        <td th:text="${plan.mealType}"></td>
+        <td th:text="${plan.userId}"></td>
+        <td th:text="${plan.foodItemIds}"></td>
+        <td th:text="${plan.totalCalories}"></td>
+        <td th:text="${plan.totalProtein}"></td>
+        <td th:text="${plan.totalFat}"></td>
+        <td th:text="${plan.totalFiber}"></td>
+        <td>
+          <a th:href="@{'/users/dietplans/edit/' + ${plan.id}}">Edit</a> |
+          <a th:href="@{'/users/dietplans/delete/' + ${plan.id}}" onclick="return confirm('Are you sure?')">Delete</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </section>
+</div>
+</body>
+</html>
+

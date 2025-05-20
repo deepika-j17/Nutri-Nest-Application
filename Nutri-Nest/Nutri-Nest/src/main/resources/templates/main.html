@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>NutriNest Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f3fdf3;
+            color: #2e4a36;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 1rem 2rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        main {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2rem;
+            padding: 3rem;
+        }
+
+        .card {
+            background-color: #e6f2e6;
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: 0.3s ease;
+        }
+
+        .card:hover {
+            background-color: #d3edd3;
+            transform: translateY(-5px);
+        }
+
+        .card a {
+            text-decoration: none;
+            color: #2e4a36;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem;
+            font-size: 0.9rem;
+            background-color: #f0fff0;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>NutriNest Dashboard</h1>
+    <p>Your Personalized Health and Fitness Hub</p>
+</header>
+
+<main>
+    <div class="card">
+        <a th:href="@{/users/dietplans}">🍽️ Diet Plans</a>
+    </div>
+    <div class="card">
+        <a th:href="@{/users/fitness}">🏋️‍♂️ Fitness Activities</a>
+    </div>
+    <div class="card">
+        <a th:href="@{/view/fooditems}">🥗 Food Items</a>
+    </div>
+    <div class="card">
+        <a th:href="@{goalReports/view}">🎯 Goal Reports</a>
+    </div>
+    <div class="card">
+        <a th:href="@{/userProgress}">📈 User Progress</a>
+    </div>
+    <div class="card">
+        <a th:href="@{view/user}">👤 Users</a>
+    </div>
+</main>
+
+<footer>
+    &copy; 2025 NutriNest. All rights reserved.
+</footer>
+
+</body>
+</html>

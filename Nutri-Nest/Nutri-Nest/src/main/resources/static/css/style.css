@@ -1,0 +1,76 @@
+/*body {*/
+/*    font-family: 'Segoe UI', sans-serif;*/
+/*    background-color: #f2fff0;*/
+/*    color: #333;*/
+/*}*/
+
+/*.container {*/
+/*    width: 80%;*/
+/*    margin: auto;*/
+/*    padding: 2em;*/
+/*    background-color: #e8f9e4;*/
+/*    border-radius: 12px;*/
+/*    box-shadow: 0 0 12px rgba(0, 128, 0, 0.1);*/
+/*}*/
+
+/*h1, h2 {*/
+/*    color: #2f8f2f;*/
+/*}*/
+
+/*table {*/
+/*    width: 100%;*/
+/*    border-collapse: collapse;*/
+/*    margin-top: 1em;*/
+/*}*/
+
+/*table, th, td {*/
+/*    border: 1px solid #c6ecc6;*/
+/*}*/
+
+/*th, td {*/
+/*    padding: 0.75em;*/
+/*    text-align: left;*/
+/*    background-color: #f5fff5;*/
+/*}*/
+
+/*.btn {*/
+/*    background-color: #a4df9c;*/
+/*    padding: 0.5em 1em;*/
+/*    text-decoration: none;*/
+/*    color: #fff;*/
+/*    border-radius: 8px;*/
+/*    font-weight: bold;*/
+/*}*/
+
+/*.btn:hover {*/
+/*    background-color: #82cc81;*/
+/*}*/
+
+body {
+    background-color: #f8fdf2;
+    color: #1a3c34;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.module-card {
+    display: block;
+    background-color: #d4edda;
+    border: 1px solid #a3d4a5;
+    padding: 20px;
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 12px;
+    box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.module-card:hover {
+    background-color: #c1e1c1;
+    transform: translateY(-3px);
+}
+
+.bg-pastel {
+    background-color: #f0fff4;
+}
+

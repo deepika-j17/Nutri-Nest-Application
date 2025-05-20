@@ -1,0 +1,257 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--  <title>Fitness Activities</title>-->
+<!--  <style>-->
+<!--    body { font-family: Arial, sans-serif; padding: 20px; }-->
+<!--    table, th, td { border: 1px solid gray; border-collapse: collapse; padding: 8px; text-align: center; }-->
+<!--    th { background-color: #e2eaff; }-->
+<!--    .form-group { margin-bottom: 10px; }-->
+<!--  </style>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<h2>Fitness Activities</h2>-->
+
+<!--<table>-->
+<!--  <tr>-->
+<!--    <th>ID</th>-->
+<!--    <th>Activity</th>-->
+<!--    <th>Duration (mins)</th>-->
+<!--    <th>Calories Burned</th>-->
+<!--    <th>Actions</th>-->
+<!--  </tr>-->
+<!--  <tr th:each="activity : ${activities}">-->
+<!--    <td th:text="${activity.id}"></td>-->
+<!--    <td th:text="${activity.activityName}"></td>-->
+<!--    <td th:text="${activity.durationInMinutes}"></td>-->
+<!--    <td th:text="${activity.caloriesBurned}"></td>-->
+<!--    <td>-->
+<!--      <a th:href="@{'/view/fitnessactivities/edit/' + ${activity.id}}">Edit</a> |-->
+<!--      <a th:href="@{'/view/fitnessactivities/delete/' + ${activity.id}}" onclick="return confirm('Are you sure?')">Delete</a>-->
+<!--    </td>-->
+<!--  </tr>-->
+<!--</table>-->
+
+<!--<h3 th:text="${editing} ? 'Edit Activity' : 'Add New Activity'"></h3>-->
+<!--<form th:action="@{${editing} ? '/view/fitnessactivities/update/' + ${newActivity.id} : '/view/fitnessactivities/add'}" method="post">-->
+<!--  <div class="form-group">-->
+<!--    <label>Activity Name:</label>-->
+<!--    <input type="text" name="activityName" th:value="${newActivity.activityName}" required>-->
+<!--  </div>-->
+<!--  <div class="form-group">-->
+<!--    <label>Duration (minutes):</label>-->
+<!--    <input type="number" name="durationInMinutes" th:value="${newActivity.durationInMinutes}" required>-->
+<!--  </div>-->
+<!--  <div class="form-group">-->
+<!--    <label>Calories Burned:</label>-->
+<!--    <input type="number" step="0.01" name="caloriesBurned" th:value="${newActivity.caloriesBurned}" required>-->
+<!--  </div>-->
+<!--  <button type="submit" th:text="${editing} ? 'Update' : 'Add'"></button>-->
+<!--</form>-->
+
+<!--</body>-->
+<!--</html>-->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Fitness Activities</title>
+  <style>
+    /* Global Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f7f7f7; /* Soft neutral background */
+      color: #444;
+      line-height: 1.6;
+    }
+
+    h1 {
+      background-color: #69A297; /* Soft Green */
+      color: white;
+      padding: 20px;
+      text-align: center;
+      font-size: 36px;
+      border-radius: 8px 8px 0 0;
+      margin-bottom: 30px;
+    }
+
+    form {
+      width: 100%;
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 30px;
+      background-color: #F9E6E1; /* Light Blush Pink */
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    form label {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      display: block;
+      color: #5E7C69; /* Muted Green */
+    }
+
+    form input, form select {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background-color: #fff;
+      font-size: 16px;
+      color: #444;
+    }
+
+    form input:focus, form select:focus {
+      border-color: #69A297; /* Soft Green */
+      outline: none;
+      box-shadow: 0 0 5px rgba(105, 162, 151, 0.4);
+    }
+
+    form button {
+      background-color: #69A297; /* Soft Green */
+      color: white;
+      font-size: 18px;
+      padding: 14px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.3s ease;
+    }
+
+    form button:hover {
+      background-color: #517a69; /* Darker Green */
+    }
+
+    table {
+      width: 90%;
+      margin: 40px auto;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 15px;
+      text-align: left;
+      font-size: 16px;
+    }
+
+    th {
+      background-color: #69A297; /* Soft Green */
+      color: white;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #F9F9F9; /* Light gray for alternating rows */
+    }
+
+    tr:hover {
+      background-color: #F1F1F1; /* Subtle hover effect */
+    }
+
+    td a {
+      color: #69A297; /* Soft Green */
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    td a:hover {
+      color: #517a69; /* Darker Green */
+    }
+
+    .actions {
+      text-align: center;
+    }
+
+    hr {
+      border: 0;
+      height: 1px;
+      background-color: #ddd;
+      margin: 30px 0;
+    }
+
+  </style>
+</head>
+<body>
+
+<h1>Fitness Activities</h1>
+
+<!-- Add / Edit Form -->
+<form th:action="@{/users/fitness/save}" th:object="${activity}" method="post">
+  <input type="hidden" th:field="*{id}"/>
+
+  <label for="userId">User ID:</label>
+  <input type="number" id="userId" th:field="*{userId}" required/>
+
+  <label for="workoutType">Activity Type:</label>
+  <select id="workoutType" th:field="*{workoutType}" required>
+    <option value="">--Select--</option>
+    <option th:each="type : ${activityTypes}" th:value="${type}" th:text="${type}"></option>
+  </select>
+
+  <label for="duration">Duration (minutes):</label>
+  <input type="number" id="duration" th:field="*{duration}" required/>
+
+  <label for="caloriesBurnt">Calories Burned:</label>
+  <input type="number" id="caloriesBurnt" th:field="*{caloriesBurnt}" required/>
+
+  <label for="workoutDate">Date:</label>
+  <input type="date" id="workoutDate" th:field="*{workoutDate}" required/>
+
+  <label for="intensity">Intensity:</label>
+  <input type="text" id="intensity" th:field="*{intensity}" required/>
+
+  <label for="noOfActivities">Number of Activities:</label>
+  <input type="number" id="noOfActivities" th:field="*{noOfActivities}" required/>
+
+  <button type="submit">Save</button>
+</form>
+
+<hr/>
+
+<!-- Activity Table -->
+<table>
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>User ID</th>
+    <th>Type</th>
+    <th>Duration (min)</th>
+    <th>Calories</th>
+    <th>Date</th>
+    <th>Intensity</th>
+    <th>No. of Activities</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="act : ${activities}">
+    <td th:text="${act.id}"></td>
+    <td th:text="${act.userId}"></td>
+    <td th:text="${act.workoutType}"></td>
+    <td th:text="${act.duration}"></td>
+    <td th:text="${act.caloriesBurnt}"></td>
+    <td th:text="${act.workoutDate}"></td>
+    <td th:text="${act.intensity}"></td>
+    <td th:text="${act.noOfActivities}"></td>
+    <td class="actions">
+      <a th:href="@{/users/fitness/edit/{id}(id=${act.id})}">Edit</a> |
+      <a th:href="@{/users/fitness/delete/{id}(id=${act.id})}" onclick="return confirm('Delete this activity?')">Delete</a>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+</body>
+</html>
